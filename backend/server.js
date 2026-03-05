@@ -1,20 +1,24 @@
-import express from 'express'
-const app = express();
-const port = 5000;
+import express from 'express';
+import cors from 'cors';
 import ConnectDB from './config/db.js';
 import adminRouter from './routes/adminRouter.js';
-import cors from 'cors';
+
+const app = express();
+
+// Use Render’s assigned port
+const PORT = process.env.PORT || 5000;
+
 // Connect to MongoDB
-// ConnectDB();   type  1 
+ConnectDB();  // Make sure you set MONGO_URI in Render Environment Variables
+
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000', // Adjust this to your frontend URL
+    origin: '*' // temporarily allow all origins
 }));
-app.use('/admin', adminRouter)
+app.use('/admin', adminRouter);
 
-// server setup
-app.listen(port, () => {
-    console.log
-    (`Server is running on http://localhost:${port}`);
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
